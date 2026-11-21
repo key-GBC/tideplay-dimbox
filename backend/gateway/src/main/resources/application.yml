@@ -1,0 +1,85 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: dimbox-gateway
+  profiles:
+    active: local
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:}
+        username: ${NACOS_USERNAME:}
+        password: ${NACOS_PASSWORD:}
+
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://dimbox-user
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - StripPrefix=1
+        - id: product-service
+          uri: lb://dimbox-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - StripPrefix=1
+        - id: order-service
+          uri: lb://dimbox-order
+          predicates:
+            - Path=/api/order/**
+          filters:
+            - StripPrefix=1
+        - id: payment-service
+          uri: lb://dimbox-payment
+          predicates:
+            - Path=/api/payment/**
+          filters:
+            - StripPrefix=1
+        - id: promotion-service
+          uri: lb://dimbox-promotion
+          predicates:
+            - Path=/api/promotion/**
+          filters:
+            - StripPrefix=1
+
+dimbox:
+  jwt:
+    secret: ${JWT_SECRET:}
+  gateway:
+    whitelist:
+      - POST:/api/user/login
+      - POST:/api/user/register
+      - GET:/api/user/health
+      - GET:/api/product/category/tree
+      - GET:/api/product/brand/list
+      - GET:/api/product/list
+      - GET:/api/product/*
+      - POST:/api/payment/callback
+    adminPaths:
+      - POST:/api/product
+      - PUT:/api/product/*
+      - PUT:/api/product/*/status
+      - DELETE:/api/product/*
+      - POST:/api/product/category
+      - PUT:/api/product/category/*
+      - DELETE:/api/product/category/*
+      - POST:/api/product/brand
+      - PUT:/api/product/brand/*
+      - DELETE:/api/product/brand/*
+      - GET:/api/product/admin/*
+      - GET:/api/product/category/admin-tree
+      - POST:/api/product/*/sku
+      - PUT:/api/product/sku/*
+      - PUT:/api/product/sku/*/status
+      - DELETE:/api/product/sku/*
+      - POST:/api/promotion/seckill/activity
+      - POST:/api/promotion/seckill/activity/*/warmup
+      - GET:/api/order/admin/*
+      - GET:/api/user/admin/*
+      - PUT:/api/user/admin/*/status
+

@@ -1,0 +1,45 @@
+# ---- IDE ----
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ---- Java / Maven ----
+target/
+out/
+*.class
+*.jar
+*.war
+*.ear
+
+# ---- Logs ----
+*.log
+logs/
+
+# ---- Node / Vue ----
+node_modules/
+dist/
+.vite/
+*.local
+
+# ---- Env / secrets ----
+.env
+.env.*
+!.env.example
+application-local.yml
+application-local.yaml
+
+# ---- Test / coverage ----
+.mvn/wrapper/maven-wrapper.jar
+hs_err_pid*
+replay_pid*
+

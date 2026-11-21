@@ -1,0 +1,2 @@
+ALTER TABLE t_user
+    ADD COLUMN role TINYINT NOT NULL DEFAULT 0 COMMENT '角色:0普通用户 1管理员';
