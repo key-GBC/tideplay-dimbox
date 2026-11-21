@@ -38,6 +38,9 @@ dist/
 application-local.yml
 application-local.yaml
 
+# ---- 个人面试准备（本地保留） ----
+docs/05-面试准备.md
+
 # ---- Test / coverage ----
 .mvn/wrapper/maven-wrapper.jar
 hs_err_pid*
