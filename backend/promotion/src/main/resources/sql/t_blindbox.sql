@@ -1,0 +1,41 @@
+CREATE TABLE IF NOT EXISTS t_blindbox_series (
+    id BIGINT NOT NULL COMMENT '主键(雪花ID)',
+    name VARCHAR(64) NOT NULL COMMENT '系列名',
+    description VARCHAR(500) DEFAULT NULL COMMENT '描述',
+    cover_image VARCHAR(255) DEFAULT NULL COMMENT '封面',
+    price INT NOT NULL COMMENT '单抽价格(分)',
+    status TINYINT NOT NULL DEFAULT 1 COMMENT '1启用 0禁用',
+    deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='盲盒系列表';
+
+CREATE TABLE IF NOT EXISTS t_blindbox_item (
+    id BIGINT NOT NULL COMMENT '主键(雪花ID)',
+    series_id BIGINT NOT NULL COMMENT '系列ID',
+    sku_id BIGINT NOT NULL COMMENT '对应SKU',
+    style_name VARCHAR(64) NOT NULL COMMENT '款式名',
+    image VARCHAR(255) DEFAULT NULL COMMENT '款式图',
+    probability INT NOT NULL COMMENT '抽取概率(万分比)',
+    is_hidden TINYINT NOT NULL DEFAULT 0 COMMENT '是否隐藏款:0否 1是',
+    deleted TINYINT NOT NULL DEFAULT 0,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_blindbox_item_series (series_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='盲盒款式表';
+
+CREATE TABLE IF NOT EXISTS t_blindbox_order (
+    id BIGINT NOT NULL COMMENT '主键(雪花ID)',
+    order_no VARCHAR(64) NOT NULL COMMENT '抽盒单号',
+    user_id BIGINT NOT NULL COMMENT '用户ID',
+    series_id BIGINT NOT NULL COMMENT '系列ID',
+    item_id BIGINT NOT NULL COMMENT '款式ID',
+    sku_id BIGINT NOT NULL COMMENT 'SKU ID',
+    price INT NOT NULL COMMENT '成交价(分)',
+    is_hidden TINYINT NOT NULL DEFAULT 0 COMMENT '是否抽中隐藏款',
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id),
+    KEY idx_blindbox_order_user (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽盒记录表';

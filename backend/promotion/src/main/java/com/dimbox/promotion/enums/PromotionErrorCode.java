@@ -14,7 +14,10 @@ public enum PromotionErrorCode {
     STOCK_NOT_ENOUGH(409, "库存不足"),
     SECKILL_NOT_STARTED(409, "活动未开始"),
     SECKILL_ENDED(409, "活动已结束"),
-    RATE_LIMITED(429, "请求过于频繁");
+    RATE_LIMITED(429, "请求过于频繁"),
+    BLINDBOX_SERIES_NOT_FOUND(404, "盲盒系列不存在或已下架"),
+    BLINDBOX_ITEM_NOT_FOUND(404, "盲盒款式不存在"),
+    PROBABILITY_SUM_ERROR(409, "概率配置错误");
 
     private final int code;
     private final String message;

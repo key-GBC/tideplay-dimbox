@@ -13,6 +13,9 @@ public interface ProductClient {
     @PostMapping("/product/stock/deduct")
     Result<Void> deduct(@RequestBody StockOperateRequest request);
 
+    @PostMapping("/product/stock/restore")
+    Result<Void> restore(@RequestBody StockOperateRequest request);
+
     @GetMapping("/product/sku/{id}")
     Result<SkuInfoResponse> getSku(@PathVariable("id") Long skuId);
 }

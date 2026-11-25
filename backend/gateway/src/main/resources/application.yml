@@ -79,6 +79,11 @@ dimbox:
       - DELETE:/api/product/sku/*
       - POST:/api/promotion/seckill/activity
       - POST:/api/promotion/seckill/activity/*/warmup
+      - POST:/api/promotion/blindbox/series
+      - PUT:/api/promotion/blindbox/series/*
+      - POST:/api/promotion/blindbox/series/*/item
+      - PUT:/api/promotion/blindbox/item/*
+      - DELETE:/api/promotion/blindbox/item/*
       - GET:/api/order/admin/*
       - GET:/api/user/admin/*
       - PUT:/api/user/admin/*/status
