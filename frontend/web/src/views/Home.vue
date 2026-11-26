@@ -11,7 +11,8 @@
 
     <div class="layout">
       <aside class="sidebar">
-        <div class="blindbox-entry" @click="router.push('/blindbox')">盲盒</div>
+        <div class="nav-entry" @click="router.push('/blindbox')">盲盒</div>
+        <div class="nav-entry" @click="router.push('/seckill')">秒杀</div>
         <el-menu @select="onMenuSelect">
           <template v-for="cat in categories" :key="cat.id">
             <el-sub-menu v-if="cat.children && cat.children.length" :index="String(cat.id)">
@@ -106,7 +107,7 @@ onMounted(async () => {
 <style scoped>
 .layout { display: flex; }
 .sidebar { width: 200px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--border); min-height: calc(100vh - 57px); }
-.blindbox-entry {
+.nav-entry {
   height: 48px;
   line-height: 48px;
   padding: 0 20px;
@@ -114,7 +115,7 @@ onMounted(async () => {
   cursor: pointer;
   border-bottom: 1px solid var(--border);
 }
-.blindbox-entry:hover {
+.nav-entry:hover {
   color: #409eff;
   background: #ecf5ff;
 }
