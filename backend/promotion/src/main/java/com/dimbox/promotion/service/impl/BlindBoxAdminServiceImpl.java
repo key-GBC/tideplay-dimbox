@@ -1,9 +1,15 @@
 package com.dimbox.promotion.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.dimbox.common.result.PageResult;
 import com.dimbox.promotion.dto.blindbox.ItemCreateRequestDto;
 import com.dimbox.promotion.dto.blindbox.ItemUpdateRequestDto;
+import com.dimbox.promotion.dto.blindbox.BlindBoxItemAdminResponseDto;
+import com.dimbox.promotion.dto.blindbox.SeriesAdminDetailResponseDto;
 import com.dimbox.promotion.dto.blindbox.SeriesCreateRequestDto;
+import com.dimbox.promotion.dto.blindbox.SeriesListQueryDto;
+import com.dimbox.promotion.dto.blindbox.SeriesListResponseDto;
 import com.dimbox.promotion.dto.blindbox.SeriesUpdateRequestDto;
 import com.dimbox.promotion.entity.BlindBoxItem;
 import com.dimbox.promotion.entity.BlindBoxSeries;
@@ -15,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +31,35 @@ public class BlindBoxAdminServiceImpl implements BlindBoxAdminService {
 
     private final BlindBoxSeriesMapper seriesMapper;
     private final BlindBoxItemMapper itemMapper;
+
+    @Override
+    public PageResult<SeriesListResponseDto> adminPageSeries(SeriesListQueryDto query) {
+        Page<BlindBoxSeries> page = new Page<>(query.getPageNum(), query.getPageSize());
+        LambdaQueryWrapper<BlindBoxSeries> wrapper = new LambdaQueryWrapper<BlindBoxSeries>()
+                .eq(query.getStatus() != null, BlindBoxSeries::getStatus, query.getStatus())
+                .orderByDesc(BlindBoxSeries::getId);
+        Page<BlindBoxSeries> result = seriesMapper.selectPage(page, wrapper);
+        List<SeriesListResponseDto> records = result.getRecords().stream()
+                .map(this::toSeriesListResponse)
+                .collect(Collectors.toList());
+        return PageResult.of(result.getTotal(), records, query.getPageNum(), query.getPageSize());
+    }
+
+    @Override
+    public SeriesAdminDetailResponseDto adminGetSeriesDetail(Long id) {
+        BlindBoxSeries series = getSeries(id);
+        List<BlindBoxItem> items = itemMapper.selectList(
+                new LambdaQueryWrapper<BlindBoxItem>().eq(BlindBoxItem::getSeriesId, id));
+        SeriesAdminDetailResponseDto dto = new SeriesAdminDetailResponseDto();
+        dto.setId(series.getId());
+        dto.setName(series.getName());
+        dto.setDescription(series.getDescription());
+        dto.setCoverImage(series.getCoverImage());
+        dto.setPrice(series.getPrice());
+        dto.setStatus(series.getStatus());
+        dto.setItems(items.stream().map(this::toItemAdminResponse).collect(Collectors.toList()));
+        return dto;
+    }
 
     @Override
     public Long createSeries(SeriesCreateRequestDto request) {
@@ -98,6 +134,29 @@ public class BlindBoxAdminServiceImpl implements BlindBoxAdminService {
             throw PromotionErrorCode.BLINDBOX_ITEM_NOT_FOUND.exception();
         }
         return item;
+    }
+
+    private SeriesListResponseDto toSeriesListResponse(BlindBoxSeries series) {
+        SeriesListResponseDto dto = new SeriesListResponseDto();
+        dto.setId(series.getId());
+        dto.setName(series.getName());
+        dto.setDescription(series.getDescription());
+        dto.setCoverImage(series.getCoverImage());
+        dto.setPrice(series.getPrice());
+        dto.setStatus(series.getStatus());
+        return dto;
+    }
+
+    private BlindBoxItemAdminResponseDto toItemAdminResponse(BlindBoxItem item) {
+        BlindBoxItemAdminResponseDto dto = new BlindBoxItemAdminResponseDto();
+        dto.setId(item.getId());
+        dto.setSeriesId(item.getSeriesId());
+        dto.setSkuId(item.getSkuId());
+        dto.setStyleName(item.getStyleName());
+        dto.setImage(item.getImage());
+        dto.setProbability(item.getProbability());
+        dto.setIsHidden(item.getIsHidden());
+        return dto;
     }
 
     private void checkProbabilitySum(Long seriesId) {

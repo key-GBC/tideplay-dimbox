@@ -16,6 +16,8 @@ const router = createRouter({
         { path: 'category', name: 'category', component: () => import('../views/CategoryManage.vue') },
         { path: 'brand', name: 'brand', component: () => import('../views/BrandManage.vue') },
         { path: 'seckill', name: 'seckill', component: () => import('../views/SeckillActivityManage.vue') },
+        { path: 'blindbox', name: 'blindbox', component: () => import('../views/BlindBoxManage.vue') },
+        { path: 'blindbox/:id/item', name: 'blindboxItem', component: () => import('../views/BlindBoxItemManage.vue') },
         { path: 'order', name: 'order', component: () => import('../views/OrderManage.vue') },
         { path: 'user', name: 'user', component: () => import('../views/UserManage.vue') },
       ],

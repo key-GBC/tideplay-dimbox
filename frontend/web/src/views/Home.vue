@@ -11,6 +11,7 @@
 
     <div class="layout">
       <aside class="sidebar">
+        <div class="blindbox-entry" @click="router.push('/blindbox')">盲盒</div>
         <el-menu @select="onMenuSelect">
           <template v-for="cat in categories" :key="cat.id">
             <el-sub-menu v-if="cat.children && cat.children.length" :index="String(cat.id)">
@@ -105,6 +106,18 @@ onMounted(async () => {
 <style scoped>
 .layout { display: flex; }
 .sidebar { width: 200px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--border); min-height: calc(100vh - 57px); }
+.blindbox-entry {
+  height: 48px;
+  line-height: 48px;
+  padding: 0 20px;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+.blindbox-entry:hover {
+  color: #409eff;
+  background: #ecf5ff;
+}
 .main { flex: 1; padding: 20px 24px; }
 .toolbar { display: flex; gap: 12px; margin-bottom: 16px; }
 .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; min-height: 200px; }

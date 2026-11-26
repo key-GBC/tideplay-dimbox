@@ -11,6 +11,7 @@ const menus = [
   { path: '/category', label: '分类管理' },
   { path: '/brand', label: '品牌管理' },
   { path: '/seckill', label: '秒杀活动' },
+  { path: '/blindbox', label: '盲盒管理' },
   { path: '/order', label: '订单管理' },
   { path: '/user', label: '用户管理' },
 ]

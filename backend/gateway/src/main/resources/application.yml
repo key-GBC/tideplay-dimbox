@@ -84,6 +84,7 @@ dimbox:
       - POST:/api/promotion/blindbox/series/*/item
       - PUT:/api/promotion/blindbox/item/*
       - DELETE:/api/promotion/blindbox/item/*
+      - GET:/api/promotion/blindbox/admin/*
       - GET:/api/order/admin/*
       - GET:/api/user/admin/*
       - PUT:/api/user/admin/*/status

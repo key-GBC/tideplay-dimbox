@@ -12,6 +12,8 @@ import com.dimbox.promotion.dto.blindbox.DrawRecordResponseDto;
 import com.dimbox.promotion.dto.blindbox.DrawResponseDto;
 import com.dimbox.promotion.dto.blindbox.BlindBoxItemResponseDto;
 import com.dimbox.promotion.dto.blindbox.SeriesDetailResponseDto;
+import com.dimbox.promotion.dto.blindbox.SeriesListQueryDto;
+import com.dimbox.promotion.dto.blindbox.SeriesListResponseDto;
 import com.dimbox.promotion.entity.BlindBoxItem;
 import com.dimbox.promotion.entity.BlindBoxOrder;
 import com.dimbox.promotion.entity.BlindBoxSeries;
@@ -40,6 +42,19 @@ public class BlindBoxServiceImpl implements BlindBoxService {
     private final BlindBoxItemMapper itemMapper;
     private final BlindBoxOrderMapper orderMapper;
     private final ProductClient productClient;
+
+    @Override
+    public PageResult<SeriesListResponseDto> pageSeries(SeriesListQueryDto query) {
+        Page<BlindBoxSeries> page = new Page<>(query.getPageNum(), query.getPageSize());
+        LambdaQueryWrapper<BlindBoxSeries> wrapper = new LambdaQueryWrapper<BlindBoxSeries>()
+                .eq(BlindBoxSeries::getStatus, 1)
+                .orderByDesc(BlindBoxSeries::getId);
+        Page<BlindBoxSeries> result = seriesMapper.selectPage(page, wrapper);
+        List<SeriesListResponseDto> records = result.getRecords().stream()
+                .map(this::toSeriesListResponse)
+                .collect(Collectors.toList());
+        return PageResult.of(result.getTotal(), records, query.getPageNum(), query.getPageSize());
+    }
 
     @Override
     public SeriesDetailResponseDto getSeriesDetail(Long id) {
@@ -156,6 +171,17 @@ public class BlindBoxServiceImpl implements BlindBoxService {
         dto.setId(item.getId());
         dto.setStyleName(item.getStyleName());
         dto.setImage(item.getImage());
+        return dto;
+    }
+
+    private SeriesListResponseDto toSeriesListResponse(BlindBoxSeries series) {
+        SeriesListResponseDto dto = new SeriesListResponseDto();
+        dto.setId(series.getId());
+        dto.setName(series.getName());
+        dto.setDescription(series.getDescription());
+        dto.setCoverImage(series.getCoverImage());
+        dto.setPrice(series.getPrice());
+        dto.setStatus(series.getStatus());
         return dto;
     }
 

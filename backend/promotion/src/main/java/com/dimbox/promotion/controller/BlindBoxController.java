@@ -6,6 +6,8 @@ import com.dimbox.promotion.dto.blindbox.DrawRecordQueryDto;
 import com.dimbox.promotion.dto.blindbox.DrawRecordResponseDto;
 import com.dimbox.promotion.dto.blindbox.DrawResponseDto;
 import com.dimbox.promotion.dto.blindbox.SeriesDetailResponseDto;
+import com.dimbox.promotion.dto.blindbox.SeriesListQueryDto;
+import com.dimbox.promotion.dto.blindbox.SeriesListResponseDto;
 import com.dimbox.promotion.service.BlindBoxService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class BlindBoxController {
 
     private final BlindBoxService blindBoxService;
+
+    @GetMapping("/series/list")
+    public Result<PageResult<SeriesListResponseDto>> listSeries(SeriesListQueryDto query) {
+        return Result.success(blindBoxService.pageSeries(query));
+    }
 
     @GetMapping("/{id}")
     public Result<SeriesDetailResponseDto> getSeriesDetail(@PathVariable("id") Long id) {
